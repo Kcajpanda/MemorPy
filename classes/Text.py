@@ -6,30 +6,31 @@ class Text:
     Serves as an object Containing the relevant data and metadata for the memorization UI.
 
     - self.text : List of full parsed text.
-    - self.blanked : Contains every word from self.text but replaces every letter, except the first letter, in each word with '_'.
+    - self.blanked : Contains every entry from self.text but replaces every letter, except the first letter, in each word with '_'. Punctuation is added unaltered.
         - EX: self.text[0] = "Word", self.blanked[0] = "W___"
-    - self.full_blanked : Contains every word from self.text but replaces every letter in each word with '_'.
+    - self.full_blanked : Contains every entry from self.text but replaces every letter in each word with '_'. Punctuation is added unaltered.
         - EX: 
-                self.text[0] = "Word", self.blanked[0] = "____"
-    - self.rand_lst : Contains a list of numbers corresponding to an index of self.text, used with level to tell which indexes of self.displayed should be replaced with blanked text.
+                self.text[0] = "Word", self.blanked[0] = "____" #TODO EX should be self.full_blank
+    - self.rand_lst : Contains a list of numbers, with each number referencing an index in self.text of a non-punctuation entry; its used with level to tell which indexes of self.displayed should be replaced with blanked text.
     - self.level : Used to tell how many elements of self.rand_lst to reference.
         - EX: 
-                self.text = ["hi", "lets", "learn", "this", "string"]
-                self.rand_lst = [4, 1, 3, 0, 2]
+                self.text = ['hi', ',', 'lets', 'learn', ':', 'this', 'string']
+                self.rand_lst = [5, 6, 3, 2, 0]
 
                 # if level is 0
-                self.display_txt() => ["hi", "lets", "learn", "this", "string"]
+                self.display_txt() => ['hi', ',', 'lets', 'learn', ':', 'this', 'string']
 
                 # if level is 3
-                self.display_txt() => ["hi", "l___", "learn", "t___", "s_____"]
-                
-    - self.displayed : Var that is used to display the text thats rpinted, initially its equal to self.text, but base don self.level and self.rand_lst is mutated to show the final text.
+                self.display_txt() => ['hi', ',', 'lets', 'l____', ':', 't___', 's_____']
+        
+    - self.max_level : The total number of non punctuation entries in self.text.        
+    - self.displayed : Var that is used to display the text thats printed, initially its equal to self.text, but base don self.level and self.rand_lst is mutated to show the final text.
         - EX: 
-                self.text = ["hi", "lets", "learn", "this", "string"]
-                self.rand_lst = [0, 1, 3, 4, 2]
+                self.text = ['hi', ',', 'lets', 'learn', ':', 'this', 'string']
+                self.rand_lst = [3, 2, 0, 5, 6]
 
                 # if level is 3
-                self.display_txt() => ["h_", "l___", "learn", "t___", "string"]
+                self.display_txt() => ['h_', ',', 'l___', 'l____', ':', 'this', 'string']
     """
 
     def __init__(self, parsed_txt:list) -> None:
@@ -43,21 +44,32 @@ class Text:
         self.blanked, self.full_blanked, self.rand_lst, self.displayed = [], [], [], []
         self.level = 0
         self.text_len = len(self.text)
-        self.max_level = self.text_len
+
+        tmp_num = 0
+        for word in self.text:
+            if word.isalpha():
+                tmp_num += 1
+        self.max_level = tmp_num
         
         # Generates two lists, both have the same numbers of words as the original text except full_blanked has every char replaced with '_' where blanked has all chars except the first replaced with '_'. So that for the el "word", full_blanked would have it as "____" and blanked as "w___"
         for word in self.text:
-            tmp_str = ""
-            for i in range(len(word)-1):
-                tmp_str += "_"
-            self.blanked.append(word[0] + tmp_str)
-            self.full_blanked.append(tmp_str + "_")
+            if word.isalpha():
+                tmp_str = ""
+                for i in range(len(word)-1):
+                    tmp_str += "_"
+                self.blanked.append(word[0] + tmp_str)
+                self.full_blanked.append(tmp_str + "_")
+            else:
+                # to keep index continuity with self.text we add the punctuation unaltered, even though we never call it
+                self.blanked.append(word)
+                self.full_blanked.append(word)
 
         # Generates a list of ascending and ordered numbers called tmp_text_nums for as many words as there are in self.text, then loops for as many words as there grabbing a random number each time, adding it to self.rand_nums and then popping it from tmp_text_nums
         tmp_text_nums = []
         for i in range(self.text_len):
-            tmp_text_nums.append(i)
-        for i in range(self.text_len):
+            if self.text[i].isalpha():
+                tmp_text_nums.append(i)
+        for i in range(len(tmp_text_nums)):
             rand_index = random.randrange(len(tmp_text_nums))
             self.rand_lst.append(tmp_text_nums[rand_index])
             tmp_text_nums.pop(rand_index)
@@ -103,9 +115,17 @@ class Text:
         self.displayed = []
         for word in self.text:
             self.displayed.append(word)
+
         for num in range(self.level):
-            self.displayed[num] = self.blanked[num]
+            # print(f"num: {num}")
+            # print(f"self.blanked[num] = {self.blanked[num]}")
+            index = self.rand_lst[num]
+            # print(f"self.rand_lst[num] = {self.rand_lst[num]}")
+            self.displayed[index] = self.blanked[index]
         return self.displayed
+    
+    def is_punc(self, val:str):
+        return val.isalpha()
 
 class OutOfLevelError (Exception):
     """
