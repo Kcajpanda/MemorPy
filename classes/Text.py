@@ -107,7 +107,30 @@ class Text:
     #TODO add an update method so it just re-scans instead of recreating display each time
         
     # Text Methods
-    def display_txt(self) -> str:
+    def out_txt(self):
+        self.gen_display_txt()
+        pretty_out = ""
+        for i in range(len(self.displayed)):
+            if i+1 != len(self.displayed):
+                if self.displayed[i].isalpha() or self.displayed[i].__contains__("_"):
+                    if self.displayed[i+1].isalpha() or self.displayed[i+1].__contains__("_"):
+                        pretty_out += f"{self.displayed[i]} "
+                    else:
+                        pretty_out += f"{self.displayed[i]}"
+                else:
+                    pretty_out += f"{self.displayed[i]} "
+
+                # if self.displayed[i+1].isalpha():
+                #     pretty_out += f"{self.displayed[i]} "
+                # elif self.displayed[i].isalpha() and not self.displayed[i+1].isalpha():
+                #     pretty_out += f"{self.displayed[i]}"
+                # elif not self.displayed[i+1].isalpha():
+                #     pretty_out += f"{self.displayed[i]} "
+            else:
+                pretty_out += self.displayed[i]
+        return pretty_out
+
+    def gen_display_txt(self) -> str:
         """
         Based on level, display the text but replaces the first [level] words in self.rand_lst with the corresponding word from self.blanked
         """
@@ -122,9 +145,6 @@ class Text:
             # print(f"self.rand_lst[num] = {self.rand_lst[num]}")
             self.displayed[index] = self.blanked[index]
         return self.displayed
-    
-    def is_punc(self, val:str):
-        return val.isalpha()
 
 class OutOfLevelError (Exception):
     """
