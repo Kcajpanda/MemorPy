@@ -8,9 +8,9 @@ class Text:
     - self.text : List of full parsed text.
     - self.blanked : Contains every entry from self.text but replaces every letter, except the first letter, in each word with '_'. Punctuation is added unaltered.
         - EX: self.text[0] = "Word", self.blanked[0] = "W___"
-    - self.full_blanked : Contains every entry from self.text but replaces every letter in each word with '_'. Punctuation is added unaltered.
+    - self.full_blank : Contains every entry from self.text but replaces every letter in each word with '_'. Punctuation is added unaltered.
         - EX: 
-                self.text[0] = "Word", self.blanked[0] = "____" #TODO EX should be self.full_blank
+                self.text[0] = "Word", self.blanked[0] = "____"
     - self.rand_lst : Contains a list of numbers, with each number referencing an index in self.text of a non-punctuation entry; its used with level to tell which indexes of self.displayed should be replaced with blanked text.
     - self.level : Used to tell how many elements of self.rand_lst to reference.
         - EX: 
@@ -37,11 +37,10 @@ class Text:
         """
         Creates a Text object, see __init__() comments or class descr for more details.
         """
-        #TODO add implementation for punc
         #TODO add ability to use blanked and full blanked
 
         self.text = copy.copy(parsed_txt)
-        self.blanked, self.full_blanked, self.rand_lst, self.displayed = [], [], [], []
+        self.blanked, self.full_blank, self.rand_lst, self.displayed = [], [], [], []
         self.level = 0
         self.text_len = len(self.text)
 
@@ -51,18 +50,18 @@ class Text:
                 tmp_num += 1
         self.max_level = tmp_num
         
-        # Generates two lists, both have the same numbers of words as the original text except full_blanked has every char replaced with '_' where blanked has all chars except the first replaced with '_'. So that for the el "word", full_blanked would have it as "____" and blanked as "w___"
+        # Generates two lists, both have the same numbers of words as the original text except full_blank has every char replaced with '_' where blanked has all chars except the first replaced with '_'. So that for the el "word", full_blank would have it as "____" and blanked as "w___"
         for word in self.text:
             if word.isalpha():
                 tmp_str = ""
                 for i in range(len(word)-1):
                     tmp_str += "_"
                 self.blanked.append(word[0] + tmp_str)
-                self.full_blanked.append(tmp_str + "_")
+                self.full_blank.append(tmp_str + "_")
             else:
                 # to keep index continuity with self.text we add the punctuation unaltered, even though we never call it
                 self.blanked.append(word)
-                self.full_blanked.append(word)
+                self.full_blank.append(word)
 
         # Generates a list of ascending and ordered numbers called tmp_text_nums for as many words as there are in self.text, then loops for as many words as there grabbing a random number each time, adding it to self.rand_nums and then popping it from tmp_text_nums
         tmp_text_nums = []
