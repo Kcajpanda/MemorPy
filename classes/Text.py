@@ -4,11 +4,14 @@ import random
 class Text:
 
     def __init__(self, parsed_txt:list) -> None:
+        #TODO add implementation for punc
+        #TODO add ability to use blanked and full blanked
         self.text = copy.copy(parsed_txt)
         self.blanked, self.full_blanked, self.rand_lst, self.displayed = [], [], [], []
         self.level = 0
 
         self.text_len = len(self.text)
+        self.max_level = self.text_len
         
         for word in self.text:
             tmp_str = ""
@@ -27,28 +30,52 @@ class Text:
             tmp_text_nums.pop(rand_index)
 
     def inc_level(self, num:int=1):
+        """
+        Adds given num to self.level as long as it keep its in range.
+
+        EX:
+        """
         if self.level + num <= self.text_len :
             self.level += num
 
     def dec_level(self, num:int=1):
+        """
+        Subtracts given num to self.level as long as it keep its in range.
+
+        EX:
+        """
         if self.level - num >= 0 :
             self.level -= num
 
     def set_level(self, num:int=0):
         """
-        Sets level to val as long as it greater than or equal to zero or si the same as the length of the string.
+        Sets level to val as long as it greater than or equal to zero. Any passed num larger than max level just sets level to max_level.
         """
-        if num >= 0 and num <= self.text_len:
-            self.level = num
+        if num >= 0:
+            if num >= self.max_level:
+                self.level = self.max_level
+            else:
+                self.level = num
+        else:
+            raise OutOfLevelError(num)
 
     def display_txt(self) -> str:
         """
         Based on level, display the text but replaces the first [level] words in self.rand_lst with the corresponding word from self.blanked
         """
+        self.displayed = []
         for word in self.text:
             self.displayed.append(word)
-        for num in range(len(self.rand_lst)):
+        for num in range(self.level):
             self.displayed[num] = self.blanked[num]
         return self.displayed
 
+class OutOfLevelError (Exception):
+    """
+    Exception for when level is outside of range.
 
+    EX:
+
+    """
+    def __init__(self, input, message="Error level negative, GIVEN="):
+        super().__init__(f"{message}{input}")
