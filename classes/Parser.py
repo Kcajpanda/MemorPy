@@ -22,6 +22,8 @@ class Parser:
         """
         Opens file of given name in read mode, parses its content based on spaces, saves the raw and parse to their hist and thn returns the parsed.
         """
+        #TODO work on more advanced process for identifying  a word
+
         with open(filename, "r") as file:
             content = file.read()
         self.hist_raw.append(content)
