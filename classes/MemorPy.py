@@ -11,7 +11,7 @@ class MemorPy:
     def loop(self, filename):
         self.add(filename)
         self.current_txt = self.texts[-1]
-        print(self.current_txt.out_txt())
+        print(f"first print: {self.current_txt.out_txt()}")
         while(True):
             self.interpret()
 
@@ -26,10 +26,12 @@ class MemorPy:
         user_in = input("What's Next? (Harder = m or ENTER, Easier = b):")
         if user_in == "m" or user_in == "M" or user_in == "":
             self.current_txt.inc_level()
-            print(self.current_txt.out_txt())
+            print(f"Text: {self.current_txt.out_txt()}")
+            print(f"Level: {self.current_txt.level}")
         elif user_in == "b" or user_in == "B":
             self.current_txt.dec_level()
-            print(self.current_txt.out_txt())
+            print(f"Text: {self.current_txt.out_txt()}")
+            print(f"Level: {self.current_txt.level}")
         elif user_in == "exit":
             exit()
         else:
