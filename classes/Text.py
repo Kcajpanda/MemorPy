@@ -108,24 +108,25 @@ class Text:
         
     # Text Methods
     def out_txt(self):
+        """
+        Gens display text and then goes through looking for non alpha chars, but not blanked words (words with '_" at the end), and readds appropriate spacing.
+        """
         self.gen_display_txt()
         pretty_out = ""
         for i in range(len(self.displayed)):
+            # Avoids out of bounds
             if i+1 != len(self.displayed):
-                if self.displayed[i].isalpha() or self.displayed[i].__contains__("_"):
-                    if self.displayed[i+1].isalpha() or self.displayed[i+1].__contains__("_"):
+                # Is current word a punc mark?
+                curr_item = self.displayed[i]
+                next_item = self.displayed[i+1]
+                if curr_item[-1].isalpha() or curr_item[-1].__contains__("_"):
+                    # Is the second word a punc mark?
+                    if next_item[-1].isalpha() or next_item.__contains__("_"):
                         pretty_out += f"{self.displayed[i]} "
                     else:
                         pretty_out += f"{self.displayed[i]}"
                 else:
                     pretty_out += f"{self.displayed[i]} "
-
-                # if self.displayed[i+1].isalpha():
-                #     pretty_out += f"{self.displayed[i]} "
-                # elif self.displayed[i].isalpha() and not self.displayed[i+1].isalpha():
-                #     pretty_out += f"{self.displayed[i]}"
-                # elif not self.displayed[i+1].isalpha():
-                #     pretty_out += f"{self.displayed[i]} "
             else:
                 pretty_out += self.displayed[i]
         return pretty_out

@@ -1,21 +1,26 @@
 from classes.Text import Text
 from classes.Parser import Parser
+from classes.MemorPy import MemorPy
 import copy
 
-parse_obj = Parser()
-parsed_text = parse_obj.parse("./test_text/test_2.txt")
+memorpy = MemorPy()
+memorpy.loop("./test_text/test_1.txt")
 
-text = Text(parsed_text)
-# print(f"text.text = {text.text}")
-# # print(f"text.blanked = {text.blanked}")
-# # print(f"text.full_blanked = {text.full_blanked}")
-# print(f"text.rand_lst = {text.rand_lst}")
 
-# # text.set_level(0)
-# # print(text.display_txt())
-text.set_level(4)
-print(text.gen_display_txt())
-print(text.out_txt())
+# parse_obj = Parser()
+# parsed_text = parse_obj.parse("./test_text/test_2.txt")
+
+# text = Text(parsed_text)
+# # print(f"text.text = {text.text}")
+# # # print(f"text.blanked = {text.blanked}")
+# # # print(f"text.full_blanked = {text.full_blanked}")
+# # print(f"text.rand_lst = {text.rand_lst}")
+
+# # # text.set_level(0)
+# # # print(text.display_txt())
+# text.set_level(4)
+# # print(text.gen_display_txt())
+# print(text.out_txt())
 
 # # print(text.max_level)
 # # print(text.display_txt())
