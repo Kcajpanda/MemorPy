@@ -27,12 +27,14 @@ class MemorPy:
     def in_tokenizer(self, user_in:str) -> list:
         tokens = user_in.split()
         return tokens
+    
+    def save_level(self) -> None:
+        self.prev_level = self.current_txt.get_level()
+        self.level_hist.append(self.prev_level)
 
     def interpret(self) -> None:
         raw_user_in = input("What's Next? (Harder = m or ENTER, Easier = b):")
         user_in = self.in_tokenizer(raw_user_in)
-        self.prev_level = self.current_txt.get_level()
-        self.level_hist.append(self.prev_level)
 
         # Command logic
         if len(user_in) == 1: 
@@ -61,15 +63,18 @@ class MemorPy:
 
     def c_inc_level(self):
         self.current_txt.inc_level()
-        print(f"Text: {self.current_txt.out_txt(self.prev_level)}")
+        # print(f"Text: {self.current_txt.out_txt(self.prev_level)}")
+        return self.current_txt.out_txt(self.prev_level)
 
     def c_dec_level(self):
         self.current_txt.dec_level()
-        print(f"Text: {self.current_txt.out_txt(self.prev_level)}")
+        # print(f"Text: {self.current_txt.out_txt(self.prev_level)}")
+        return self.current_txt.out_txt(self.prev_level)
 
     def c_set_level(self, user_in):
         self.current_txt.set_level(user_in)
-        print(f"Text: {self.current_txt.out_txt(self.prev_level)}")
+        # print(f"Text: {self.current_txt.out_txt(self.prev_level)}")
+        return self.current_txt.out_txt(self.prev_level)
 
     def memorpy_exit(self):
         exit()

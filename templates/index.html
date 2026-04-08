@@ -6,11 +6,17 @@
 <body>
     <h1>MemorPy</h1>
 
-    <p>{{ text }}</p>
-
     <form method="POST">
-        <button name="action" value="harder">Harder</button>
-        <button name="action" value="easier">Easier</button>
+        <input 
+            type="range" 
+            name="level" 
+            min="0" 
+            max="{{ max_level }}" 
+            value="{{ level }}"
+            onchange="this.form.submit()"
+        >
     </form>
+
+    <p>{{ text }}</p>
 </body>
 </html>

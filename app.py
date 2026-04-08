@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request
 from classes.MemorPy import MemorPy
 
 app = Flask(__name__)
@@ -10,16 +10,25 @@ memorpy.current_txt = memorpy.texts[-1]
 
 @app.route("/", methods=["GET", "POST"])
 def index():
+
     if request.method == "POST":
-        action = request.form.get("action")
+        # 1. get slider value
+        level = int(request.form.get("level"))
 
-        if action == "harder":
-            memorpy.current_txt.inc_level()
-        elif action == "easier":
-            memorpy.current_txt.dec_level()
+        # 2. store previous level (CRITICAL for your system)
+        memorpy.save_level()
 
-    output = memorpy.current_txt.out_txt()
-    return render_template("index.html", text=output)
+        # 3. update level using your backend command
+        output = memorpy.c_set_level(level)
+    else:
+        output = memorpy.current_txt.out_txt(memorpy.prev_level)
+
+    return render_template(
+        "index.html",
+        text=output,
+        level=memorpy.current_txt.get_level(),
+        max_level=memorpy.current_txt.get_max_level()
+    )
 
 
 if __name__ == "__main__":
