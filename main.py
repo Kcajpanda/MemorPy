@@ -4,7 +4,7 @@ from classes.MemorPy import MemorPy
 import copy
 
 memorpy = MemorPy()
-memorpy.loop("./test_text/test_1.txt")
+memorpy.loop("./test_text/test_2.txt")
 
 
 # # parse_obj = Parser()

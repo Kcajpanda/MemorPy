@@ -1,3 +1,5 @@
+from classes.Entry import Entry
+
 class Parser:
     """
     Currently just serves as a class to contain the parse method, and keep a history of all things parsed.
@@ -48,4 +50,9 @@ class Parser:
             spacing+=1
         
         self.hist.append(parsed_text)
-        return parsed_text
+
+        validated = []
+        for entry in parsed_text:
+            validated.append(Entry.validate(entry))
+
+        return validated
