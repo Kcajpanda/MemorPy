@@ -155,7 +155,8 @@ class Word (Entry):
         Directly sets the value of the bool self.state then calls an update via self.update_curr() to update self.curr
         """
         self.state = state
-        self.update_curr()
+        print(f"state changed to {state}")
+        # self.update_curr()
 
     def get_curr(self):
         """
@@ -194,6 +195,18 @@ class Punc (Entry):
         A mirror of the Word class's get_curr(). Since Punc instances don't have state or alt text versions it just return self.val.
         """
         return self.get_val()
+    
+    def swap_state(self) -> None:
+        """
+        Inverts value of the bool self.state then calls an update via self.update_curr() to update self.curr
+        """
+        pass
+
+    def set_state(self, state:bool) -> None:
+        """
+        Directly sets the value of the bool self.state then calls an update via self.update_curr() to update self.curr
+        """
+        pass
     
     def get_len(self):
         """

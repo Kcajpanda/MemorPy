@@ -64,17 +64,17 @@ class MemorPy:
     def c_inc_level(self):
         self.current_txt.inc_level()
         # print(f"Text: {self.current_txt.out_txt(self.prev_level)}")
-        return self.current_txt.out_txt(self.prev_level)
+        return self.current_txt.out_txt()
 
     def c_dec_level(self):
         self.current_txt.dec_level()
         # print(f"Text: {self.current_txt.out_txt(self.prev_level)}")
-        return self.current_txt.out_txt(self.prev_level)
+        return self.current_txt.out_txt()
 
     def c_set_level(self, user_in):
         self.current_txt.set_level(user_in)
-        # print(f"Text: {self.current_txt.out_txt(self.prev_level)}")
-        return self.current_txt.out_txt(self.prev_level)
+        print(f"self.current_txt.get_level() = {self.current_txt.get_level()}")
+        return self.current_txt.out_txt()
 
     def memorpy_exit(self):
         exit()

@@ -135,14 +135,59 @@ class Text:
         else:
             raise OutOfLevelError(num)
         
-    # Text Methods
-    def out_txt(self, prev_level:int=0) -> str:
+    # Update Methods
+    def update_single(self, index, state):
         """
-        Forces self.displayed to update self, then goes through looking for non alpha chars, but not blanked words (words with '_" at the end), and re-adds appropriate spacing. In essence it un-parses the text but this time includes the changes made to blank out the text.
+        Updates state of a single Entry obj at self.text[index], and forces self.displayed[index] to be equal to the the Entry obj's .get_curr()
+        """
+        self.text[index].set_state(state)
+        self.displayed[index] = self.text[index].get_curr()
+
+    def update_range(self, start:int, stop:int) -> None:
+        """
+        Based on start and stop args (presumably self.level and prev_level, or ranges that allow for looping all fo self.rand_lst) loops through and updates the .get_curr() ref for each item in self.displayed base don the indexes returned from self.rand_lst.
+        """
+        if self.level != 0:
+            for num in self.rand_lst[start:stop]:
+                self.update_single(num, False)
+                # print(f"changed state of {num} to False")
+                # print(f"self.text[num].get_curr() = self.text[{num}].get_curr() = {self.text[num].get_curr()}")
+                # print(f"self.displayed[{num}] = {self.displayed[num]}")
+
+    def full_update(self):
+        """
+        Runs through and fully updates each .get_curr() for self.displayed instead of just checking for ones that have been changed. Makes use of update_curr() to run the loop
+        """
+        self.reset_text()
+        self.update_range(1, self.level+1)
+    
+    def partial_update(self, prev_level: int) -> None:
+        """
+        Compares the level of the previous out_txt (passed as an arg), and the current level request (via a live self.level call), to determine which indexes of self.displayed need to make update what they point to via .get_curr(). Compares the curr and prev level to understand which direction to iterate in.
+        """
+        diff = self.level - prev_level
+        # print(f"diff = {diff}")
+        if diff > 0:
+            # print(f"Working in range: {self.rand_lst[prev_level+1: self.level+1]}")
+            self.update_range(prev_level+1, self.level+1)
+        else:
+            # print(f"Working in range: {self.rand_lst[self.level+1: prev_level+1]}")
+            self.update_range(self.level+1, prev_level+1)
+
+    # Text Management
+    def reset_text(self):
+        """
+        Resets self.state to True for every entry in self.text, assumes a later call of self.get_curr() to reflect new change in state.
+        """
+        for i in range(len(self.text)):
+            self.update_single(i, True) 
+
+    def clean_txt(self) -> str:
+        """
+        Goes through looking for non alpha chars, but not blanked words (words with '_" at the end), and re-adds appropriate spacing. In essence it un-parses the text but this time includes the changes made to blank out the text.
         """
         pretty_out = ""
 
-        self.update(prev_level)
         for i in range(len(self.displayed)):
             # Avoids out of bounds
             if i+1 != len(self.displayed):
@@ -159,35 +204,16 @@ class Text:
                     pretty_out += f"{self.displayed[i]} "
             else:
                 pretty_out += self.displayed[i]
-        return pretty_out
+        return pretty_out  
+        
+    def out_txt(self) -> str:
+        """
+        Forces self.displayed to run a full update, then cleans and return the text.
+        """
+        self.full_update()
+        return self.clean_txt()
     
-    def update_curr(self, start:int, stop:int) -> None:
-        """
-        Based on start and stop args (presumably self.level and prev_level, or ranges that allow for looping all fo self.rand_lst) loops through and updates the .get_curr() ref for each item in self.displayed base don the indexes returned from self.rand_lst.
-        """
-        for num in self.rand_lst[start:stop]:
-            self.text[num].swap_state()
-            self.displayed[num] = self.text[num].get_curr()
-    
-    def update(self, prev_level: int) -> None:
-        """
-        Compares the level of the previous out_txt (passed as an arg), and the current level request (via a live self.level call), to determine which indexes of self.displayed need to make update what they point to via .get_curr(). Compares the curr and prev level to understand which direction to iterate in.
-        """
-        diff = self.level - prev_level
-        # print(f"diff = {diff}")
-        if diff > 0:
-            # print(f"Working in range: {self.rand_lst[prev_level+1: self.level+1]}")
-            self.update_curr(prev_level+1, self.level+1)
-        else:
-            # print(f"Working in range: {self.rand_lst[self.level+1: prev_level+1]}")
-            self.update_curr(self.level+1, prev_level+1)
-    
-    def full_update(self):
-        """
-        Runs through and fully updates each .get_curr() for self.displayed instead of just checking for ones that have been changed. Makes use of update_curr() to run the loop
-        """
-        self.update_curr(self.level+1)
-
+# Exception Classes
 class OutOfLevelError (Exception):
     """
     Exception for when level is outside of range.

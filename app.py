@@ -16,12 +16,12 @@ def index():
         level = int(request.form.get("level"))
 
         # 2. store previous level (CRITICAL for your system)
-        memorpy.save_level()
+        # memorpy.save_level()
 
         # 3. update level using your backend command
         output = memorpy.c_set_level(level)
     else:
-        output = memorpy.current_txt.out_txt(memorpy.prev_level)
+        output = memorpy.current_txt.out_txt()
 
     return render_template(
         "index.html",
