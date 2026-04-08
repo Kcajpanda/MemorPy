@@ -161,6 +161,14 @@ class Text:
                 pretty_out += self.displayed[i]
         return pretty_out
     
+    def update_curr(self, start:int, stop:int) -> None:
+        """
+        Based on start and stop args (presumably self.level and prev_level, or ranges that allow for looping all fo self.rand_lst) loops through and updates the .get_curr() ref for each item in self.displayed base don the indexes returned from self.rand_lst.
+        """
+        for num in self.rand_lst[start:stop]:
+            self.text[num].swap_state()
+            self.displayed[num] = self.text[num].get_curr()
+    
     def update(self, prev_level: int) -> None:
         """
         Compares the level of the previous out_txt (passed as an arg), and the current level request (via a live self.level call), to determine which indexes of self.displayed need to make update what they point to via .get_curr(). Compares the curr and prev level to understand which direction to iterate in.
@@ -169,23 +177,16 @@ class Text:
         # print(f"diff = {diff}")
         if diff > 0:
             # print(f"Working in range: {self.rand_lst[prev_level+1: self.level+1]}")
-            for num in self.rand_lst[prev_level+1: self.level+1]:
-                # index = self.rand_lst[num]
-                # print(f"index to change: {index}, corresponds to => {self.text[index]}")
-                # print(f"num: {num}, corresponds to {self.text[num].get_blank()}")
-                # self.displayed[num] = self.text[num].get_curr()
-                self.text[num].swap_state()
-                self.displayed[num] = self.text[num].get_curr()
+            self.update_curr(prev_level+1, self.level+1)
         else:
             # print(f"Working in range: {self.rand_lst[self.level+1: prev_level+1]}")
-            for num in self.rand_lst[self.level+1: prev_level+1]:
-                # index = self.rand_lst[num]
-                # print(f"index to change: {index}, corresponds to => {self.text[index]}")
-                # print(f"num: {num}, corresponds to {self.text[num].get_val()}")
-                # self.displayed[num] = self.text[num].get_curr()
-                self.text[num].swap_state()
-                self.displayed[num] = self.text[num].get_curr()
-        
+            self.update_curr(self.level+1, prev_level+1)
+    
+    def full_update(self):
+        """
+        Runs through and fully updates each .get_curr() for self.displayed instead of just checking for ones that have been changed. Makes use of update_curr() to run the loop
+        """
+        self.update_curr(self.level+1)
 
 class OutOfLevelError (Exception):
     """

@@ -1,10 +1,10 @@
 from flask import Flask, render_template, request
 from classes.MemorPy import MemorPy
 
-app = Flask(__name__)
+app = Flask("MemorPy")
 
 memorpy = MemorPy()
-memorpy.add("./test_text/test_1.txt")
+memorpy.add("./test_text/test_2.txt")
 memorpy.current_txt = memorpy.texts[-1]
 
 
