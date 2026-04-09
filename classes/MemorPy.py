@@ -36,7 +36,7 @@ class MemorPy:
 
     def c_set_level(self, user_in):
         self.current_txt.set_level(user_in)
-        print(f"self.current_txt.get_level() = {self.current_txt.get_level()}")
+        # print(f"self.current_txt.get_level() = {self.current_txt.get_level()}")
         return self.current_txt.out_txt()
 
     def memorpy_exit(self):
@@ -104,7 +104,7 @@ class List_Stored_Texts:
         """
         Adds a raw Text obj to it list of texts by containing it in a Stored_Text obj and storing that Stored_text obj alongside an id and name for simple searches.
         """
-        id = len(self.texts) - 1 
+        id = len(self.texts)
         self.texts.append(Stored_Text(name, id, parsed_text))
     
     def get_curr_text(self) -> Text:

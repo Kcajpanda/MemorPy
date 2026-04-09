@@ -61,6 +61,8 @@ class Text:
         """
         #TODO add ability to use blanked and full blanked
 
+        #TODO add preview for online list
+
         self.text = copy.copy(valid_txt)
         self.rand_lst, self.displayed = [], []
         self.text_len = len(self.text)

@@ -143,6 +143,7 @@ class Word (Entry):
         else:
             self.curr = self.blank
     
+    # Deprecated for state style
     def swap_state(self) -> None:
         """
         Inverts value of the bool self.state then calls an update via self.update_curr() to update self.curr

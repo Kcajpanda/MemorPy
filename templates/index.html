@@ -4,9 +4,13 @@
     <title>MemorPy</title>
 </head>
 <body>
-    <h1>MemorPy</h1>
+    <div class="pg_title"><h1>MemorPy</h1></div>
 
-    <form method="POST">
+    <div class="memor_text">
+        <p>{{ text }}</p>
+    </div>
+
+    <form method="POST" class="slider">
         <input 
             type="range" 
             name="level" 
@@ -17,6 +21,27 @@
         >
     </form>
 
-    <p>{{ text }}</p>
+    <form method="POST" class="up_down_buttons">
+        <button name="action" value="dec" id="dec">-</button>
+        <button name="action" value="inc" id="inc">+</button>
+    </form>
+
+    <div class="Level_dis">
+        <p>Level: {{ level }} / {{ max_level }}</p>
+    </div>
+
+    <br>
+
+    <div class="file_upload">
+        <form method="POST" enctype="multipart/form-data">
+            <input type="file" name="file">
+            <button name="action" value="upload">Upload</button>
+        </form>
+    </div>
+
+    <div class="file_lst">
+        
+    </div>
+
 </body>
 </html>

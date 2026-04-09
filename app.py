@@ -1,7 +1,10 @@
 from flask import Flask, render_template, request
 from classes.MemorPy import MemorPy
+import os
 
 app = Flask("MemorPy")
+UPLOAD_FOLDER = "uploads"
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 memorpy = MemorPy()
 memorpy.add("./test_text/test_1.txt")
@@ -13,14 +16,30 @@ memorpy.set_curr_txt("./test_text/test_1.txt")
 def index():
 
     if request.method == "POST":
-        # 1. get slider value
-        level = int(request.form.get("level"))
+        action = request.form.get("action")
+        
+        if action == "inc":
+            output = memorpy.c_inc_level()
+        elif action == "dec":
+            output = memorpy.c_dec_level()
+        elif action == "upload":
+            file = request.files.get("file")
 
-        # 2. store previous level (CRITICAL for your system)
-        # memorpy.save_level()
+            if file and file.filename != "":
+                filepath = os.path.join(UPLOAD_FOLDER, file.filename)
+                file.save(filepath)
 
-        # 3. update level using your backend command
-        output = memorpy.c_set_level(level)
+                memorpy.add(filepath)
+                memorpy.set_curr_txt(filepath)
+
+                output = memorpy.current_txt.out_txt()
+            else:
+                output = memorpy.current_txt.out_txt()
+        else:
+            level = int(request.form.get("level"))
+            output = memorpy.c_set_level(level)
+          
+        
     else:
         output = memorpy.current_txt.out_txt()
 
