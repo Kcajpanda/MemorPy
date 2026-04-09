@@ -4,8 +4,9 @@ from classes.MemorPy import MemorPy
 app = Flask("MemorPy")
 
 memorpy = MemorPy()
+memorpy.add("./test_text/test_1.txt")
 memorpy.add("./test_text/test_2.txt")
-memorpy.current_txt = memorpy.texts[-1]
+memorpy.set_curr_txt("./test_text/test_1.txt")
 
 
 @app.route("/", methods=["GET", "POST"])
